@@ -28,6 +28,13 @@
 	function setTextColor(picker) {
 		document.getElementsByTagName('body')[0].style.color = '#' + picker.toString()
 	}
+
+	window.onload = function() {
+		document.getElementById('chosen-value').onchange = function() {
+			console.log('...');
+		};
+	}
+	
 	</script>
 
 

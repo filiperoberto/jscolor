@@ -534,6 +534,8 @@ var jsc = {
 			}
 		} else if (target._jscControlName) {
 			jsc.onControlPointerStart(e, target, target._jscControlName, 'mouse');
+		} else if (target._removeColor) {
+			//console.log('..');
 		} else {
 			// Mouse is outside the picker controls -> hide the color picker!
 			if (jsc.picker && jsc.picker.owner) {
@@ -933,6 +935,22 @@ var jsc = {
 		return sliderObj;
 	},
 
+	createRemoveColorButton : function() {
+		var rmbt = document.createElement('button');
+		rmbt.innerHTML = "Remover Cor";
+		rmbt._removeColor = true;
+		rmbt.style.cursor = 'pointer';
+		rmbt.style.padding = '2px';
+
+		rmbt.addEventListener('click',function(){
+			jsc.picker.owner.valueElement.value = '';
+
+			jsc.picker.owner.styleElement.style.backgroundColor = '';
+			jsc.dispatchChange(jsc.picker.owner);
+			jsc.picker.owner.hide();
+		});
+		return rmbt;
+	},
 
 	leaveValue : 1<<0,
 	leaveStyle : 1<<1,
@@ -1391,7 +1409,8 @@ var jsc = {
 					sldPtrMB : document.createElement('div'), // slider pointer middle border
 					sldPtrOB : document.createElement('div'), // slider pointer outer border
 					btn : document.createElement('div'),
-					btnT : document.createElement('span') // text
+					btnT : document.createElement('span'), // text
+					rmbt : jsc.createRemoveColorButton()
 				};
 
 				jsc.picker.pad.appendChild(jsc.picker.padPal.elm);
@@ -1415,6 +1434,8 @@ var jsc = {
 
 				jsc.picker.btn.appendChild(jsc.picker.btnT);
 				jsc.picker.box.appendChild(jsc.picker.btn);
+
+				jsc.picker.box.appendChild(jsc.picker.rmbt);
 
 				jsc.picker.boxB.appendChild(jsc.picker.box);
 				jsc.picker.wrap.appendChild(jsc.picker.boxS);
@@ -1440,7 +1461,11 @@ var jsc = {
 
 			// picker
 			p.box.style.width = dims[0] + 'px';
-			p.box.style.height = dims[1] + 'px';
+			p.box.style.height = (dims[1] + 30 )+ 'px';
+
+			p.rmbt.style.position = 'absolute';
+			p.rmbt.style.left = '12px';
+			p.rmbt.style.bottom = "10px";
 
 			p.boxS.style.position = 'absolute';
 			p.boxS.style.left = '0';
